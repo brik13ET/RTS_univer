@@ -95,15 +95,15 @@ int main(void)
 	HANDLE hThread[3];
 	setlocale(LC_ALL, "rus");
 	hThread[0] = CreateThread(0, 0, sqr_t,	NULL, 0, &tid);
-	printf("����� 0x%x ������\n", tid);
+	printf("РџРѕС‚РѕРє 0x%x СЃРѕР·РґР°РЅ\n", tid);
 	hThread[1] = CreateThread(0, 0, sum_t,	NULL, 0, &tid);
-	printf("����� 0x%x ������\n", tid);
+	printf("РџРѕС‚РѕРє 0x%x СЃРѕР·РґР°РЅ\n", tid);
 	hThread[2] = CreateThread(0, 0, sqrt_t,	NULL, 0, &tid);
-	printf("����� 0x%x ������\n", tid);
+	printf("РџРѕС‚РѕРє 0x%x СЃРѕР·РґР°РЅ\n", tid);
 	DWORD readed;
 
 
-	printf("������� ����� �������, �������� �� �������� ��� ��������� ������\n");
+	printf("Р’Р’РµРґРёС‚Рµ РґР»РёРЅС‹ РєР°С‚РµС‚РѕРІ, СЂР°Р·РґРµР»СЏСЏ РёС… РїСЂРѕР±РµР»РѕРј РёР»Рё РїРµСЂРµРЅРѕСЃРѕРј СЃС‚РѕСЂРєРё\n");
 	double a = 2, b = 4;
 	scanf_s("%lf %lf", &a, &b);
 
