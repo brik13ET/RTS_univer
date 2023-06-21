@@ -12,8 +12,10 @@
     ]
   },
   "ExpandedNodes": [
-    ""
+    "",
+    "\\lab3",
+    "\\lab4"
   ],
-  "SelectedNode": "\\RTS3.c",
+  "SelectedNode": "\\lab4\\matr.c",
   "PreviewInSolutionExplorer": false
 }
