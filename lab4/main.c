@@ -4,6 +4,7 @@
 #include <intrin.h>
 #include "matr.h"
 #include "arr.h"
+#include <statistic.h>
 
 // BDFGJ
 /*
@@ -41,6 +42,7 @@ uint64_t f1(void)
 	}
 
 	f1_time = -__rdtsc();
+	return f1_time;
 }
 
 uint64_t f2(void)
@@ -49,6 +51,7 @@ uint64_t f2(void)
 	f2_time = __rdtsc();
 	Array_Sort(A);
 	f2_time = -__rdtsc();
+	return f2_time;
 }
 
 uint64_t f3(void)
@@ -58,6 +61,7 @@ uint64_t f3(void)
 	f3_time = __rdtsc();
 	Matr_Mul(M1, M2);
 	f3_time = -__rdtsc();
+	return f3_time;
 }
 
 uint64_t ff(void)
@@ -68,82 +72,9 @@ uint64_t ff(void)
 	else
 		f3();
 	ff_time = f1_time + f2_time + f3_time;
+	return ff_time;
 }
 
-float avg(uint64_t* arr, size_t len)
-{
-	float ret = 0;
-	for (size_t i = 0; i < len; i++)
-		ret += arr[i];
-	ret /= len;
-	return ret;
-}
-
-float Array_minf(float* A, uint16_t len)
-{
-	if (len < 1)
-		return A[0];
-	float R = A[0];
-	for (size_t i = 1; i < len; i++)
-	{
-		if (A[i] < R)
-			R = A[i];
-	}
-	return R;
-}
-
-
-float Array_maxf(float* A, uint16_t len)
-{
-	if (len < 1)
-		return A[0];
-	float R = A[0];
-	for (size_t i = 1; i < len; i++)
-	{
-		if (A[i] > R)
-			R = A[i];
-	}
-	return R;
-}
-
-void norm(float* A, uint16_t len)
-{
-	float max = Array_maxf(A, len);
-	float min = Array_minf(A, len);
-	float q = max - min;
-
-	for (size_t i = 0; i < len; i++)
-		A[i] = (A[i] - min) / q;
-}
-
-void hist(float* A, uint16_t len, uint8_t cnt)
-{
-	float min = Array_minf(A, len);
-	float max = Array_maxf(A, len);
-	float divid = (max - min) / cnt;
-
-	uint8_t* ret = (uint8_t*)calloc(cnt, sizeof(uint8_t));
-	float Ax = min, Bx = min + divid;
-	for (size_t i = 0; i < cnt; i++)
-	{
-		printf("%2.2e ", Ax + 0.5f * divid - min);
-		ret[i] = 0;
-		for (size_t j = 0; j < len; j++)
-		{
-			if (Ax <= A[j] && A[j] < Bx)
-			{
-				printf("#");
-				ret[i] ++;
-			}
-		}
-		printf("\r\n");
-		Ax += divid;
-		Bx += divid;
-	}
-	
-	free(ret);
-}
-// 27669979496244576256.000000
 int main(void)
 {
 	f_index = 0;
@@ -153,24 +84,26 @@ int main(void)
 	for (f_index = 0; f_index < 100; f_index++)
 		ff();
 	float
-		t1 = avg(times[0], 100),
-		t2 = avg(times[1], 100),
-		t3 = avg(times[2], 100),
-		ts = avg(times[3], 100);
-	hist(times[3], 100, 8);
-	printf(
-		"f1:	%22.0f\n"
-		"f2:	%22.0f\n"
-		"f3:	%22.0f\n"
-		"sumf:	%22.0f\n"
-		" = :	%22.0f\n",
-		t1, t2, t3, ts, t1 + 0.5*t2 + 0.5*t3
-	);
+		t1 = Stat_avgu64(times[0], 100),
+		t2 = Stat_avgu64(times[1], 100),
+		t3 = Stat_avgu64(times[2], 100),
+		ts = Stat_avgu64(times[3], 100);
+	float
+		* tim1 = Stat_ticksToTime(times[0], 100, 3.0e9),
+		* tim2 = Stat_ticksToTime(times[1], 100, 3.0e9),
+		* tim3 = Stat_ticksToTime(times[2], 100, 3.0e9),
+		* timF = Stat_ticksToTime(times[3], 100, 3.0e9);
 	for (size_t i = 0; i < 100; i++)
 	{
-		printf("%016lu\t%016lu\t%016lu\t%016lu\n",
-			times[0][i], times[1][i], times[2][i], times[3][i]);
+		printf("%1.8e\t%1.8e\t%1.8e\t%1.8e\n",
+			tim1[i], tim2[i], tim3[i], timF[i]);
+		/*printf("%011u\t%011u\t%011u\t%011u\n",
+			times[0][i], times[1][i], times[2][i], times[3][i]);*/
 	}
+	free(tim1);
+	free(tim2);
+	free(tim3);
+	free(timF);
 	Matr_Delete(M1);
 	Matr_Delete(M2);
 	Array_Delete(A);

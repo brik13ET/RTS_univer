@@ -8,7 +8,8 @@ project ("RTS4")
 
 # Добавьте источник в исполняемый файл этого проекта.
 add_executable (RTS3  "${CMAKE_SOURCE_DIR}/lab3/main.c")
-add_executable (RTS4  "${CMAKE_SOURCE_DIR}/lab4/main.c" "lab4/matr.c" "lab4/arr.c")
+#add_executable (RTS4  "${CMAKE_SOURCE_DIR}/lab4/main.c" "lab4/matr.c" "lab4/arr.c" "lab4/statistic.c")
+add_executable (RTS4  "${CMAKE_SOURCE_DIR}/lab4_re/main.c")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
 	set_target_properties(RTS3
